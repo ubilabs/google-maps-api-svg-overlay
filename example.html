@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Google Maps API - Reachability</title>
+    <link href="https://google-developers.appspot.com/maps/documentation/javascript/examples/default.css" rel="stylesheet">
+    <style type="text/css">
+      #map_canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+
+      svg path {
+        stroke-width: 1;
+        opacity: 0.5;
+        stroke-opacity: 0.2;
+        vector-effect: non-scaling-stroke;
+      }
+
+      svg path[data-income-grp="1. High income: OECD"] {
+        fill: #F00;
+      }
+
+      svg path[data-income-grp="2. High income: nonOECD"] {
+        fill: #F90;
+      }
+
+      svg path[data-income-grp="3. Upper middle income"] {
+        fill: #FF0;
+      }
+
+      svg path[data-income-grp="4. Lower middle income"] {
+        fill: #0CF;
+      }
+
+      svg path[data-income-grp="5. Low income"] {
+        fill: #00F;
+      }
+
+
+    </style>
+  </head>
+  <body>
+    <div id="map_canvas"></div>
+    <script src="http://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;sensor=false"></script>
+    <script src="svgoverlay.js"></script>
+    <script>
+
+      var map = new google.maps.Map(document.getElementById('map_canvas'), {
+        zoom: 2,
+        center: new google.maps.LatLng(20, 0),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      });
+
+      var xmlhttp = new XMLHttpRequest();
+      xmlhttp.open("GET", "example.svg", false);
+      xmlhttp.send();
+      
+
+      var overlay = new SVGOverlay({ 
+        content: xmlhttp.responseText,
+        map: map 
+      });
+      
+    </script>
+  </body>
+</html>
