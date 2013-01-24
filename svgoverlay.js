@@ -65,16 +65,27 @@ SVGOverlay.prototype.draw = function() {
 
   if (!projection || !this.svg_){ return; }
 
-  var center = projection.fromLatLngToDivPixel(this.center_),
-    width = projection.getWorldWidth(),
-    offset = width / 2,
-    style = this.div_.style;
+  var style = this.div_.style,
 
+    // compute layer offset
+    center = projection.fromLatLngToDivPixel(this.center_),
+    width = Math.round(projection.getWorldWidth()),
+    offset = width / 2,
+    
+    left = Math.round(center.x) - offset,
+    top = Math.round(center.y) - offset,
+
+    // compute offset for small zoom levels
+    factor = Math.max(1024 / width, 1) - 1;
+
+  // scale svg to world bounds
   this.svg_.setAttribute("width", width);
   this.svg_.setAttribute("height", width);
 
-  style.left = (center.x - offset) + 'px';
-  style.top = (center.y - offset) + 'px';
+  // apply offset
+  style.left = left + 'px';
+  style.top = top + 'px';
+  style.marginLeft = (-factor * offset) + "px";
 };
 
 // Internal method. Triggered when `setMap` was called with `null.
