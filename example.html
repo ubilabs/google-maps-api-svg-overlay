@@ -13,33 +13,6 @@
         bottom: 0;
       }
 
-      svg path {
-        stroke-width: 1;
-        opacity: 0.5;
-        stroke-opacity: 0.2;
-        vector-effect: non-scaling-stroke;
-      }
-
-      svg path[data-income-grp="1. High income: OECD"] {
-        fill: #F00;
-      }
-
-      svg path[data-income-grp="2. High income: nonOECD"] {
-        fill: #F90;
-      }
-
-      svg path[data-income-grp="3. Upper middle income"] {
-        fill: #FF0;
-      }
-
-      svg path[data-income-grp="4. Lower middle income"] {
-        fill: #0CF;
-      }
-
-      svg path[data-income-grp="5. Low income"] {
-        fill: #00F;
-      }
-
       #canvas {
         position: absolute;
         z-index: 1;
@@ -53,8 +26,6 @@
   <body>
     <div id="map_canvas"></div>
     <img id="canvas" />
-    <script type="text/javascript" src="http://canvg.googlecode.com/svn/trunk/rgbcolor.js"></script> 
-    <script type="canvg.js"></script> 
     <script src="http://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;sensor=false"></script>
     <script src="svgoverlay.js"></script>
     <script>
@@ -77,6 +48,32 @@
 
       var svg = overlay.getSVG();
 
+      svg.setAttribute("opacity", 0.5);
+
+
+      function paint(){
+
+        var rule, color, elems, i,
+          colors = {
+            "1. High income: OECD": "#F00",
+            "2. High income: nonOECD": "#F90",
+            "3. Upper middle income": "#FF0",
+            "4. Lower middle income": "#0CF",
+            "5. Low income": "#00F"          
+          };
+
+        for (rule in colors){
+          elems = svg.querySelectorAll('path[data-income-grp="' + rule + '"]');
+          color = colors[rule];
+
+          for (i = 0; i < elems.length; i++){
+            elems[i].setAttribute("fill", color);
+          }
+        }
+
+      }
+
+      paint();
 
       var img = document.getElementById("canvas");
 
