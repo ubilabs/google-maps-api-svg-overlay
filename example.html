@@ -40,11 +40,21 @@
         fill: #00F;
       }
 
+      #canvas {
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        background-color: rgba(0,0,0,0.5);
+      }
+
 
     </style>
   </head>
   <body>
     <div id="map_canvas"></div>
+    <img id="canvas" />
+    <script type="text/javascript" src="http://canvg.googlecode.com/svn/trunk/rgbcolor.js"></script> 
+    <script type="canvg.js"></script> 
     <script src="http://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;sensor=false"></script>
     <script src="svgoverlay.js"></script>
     <script>
@@ -64,6 +74,62 @@
         content: xmlhttp.responseText,
         map: map 
       });
+
+      var svg = overlay.getSVG();
+
+
+      var img = document.getElementById("canvas");
+
+      function draw(){
+
+        var center = new google.maps.LatLng(0,0),
+          // compute map offset
+          projection = overlay.getProjection(),
+          divPixel = projection.fromLatLngToDivPixel(center),
+          containerPixel = projection.fromLatLngToContainerPixel(center),
+
+          // compute container offset.
+          styles = overlay.getContainer().style,
+          left = parseInt(styles.left, 10),
+          top = parseInt(styles.top, 10),
+
+          x = divPixel.x - containerPixel.x - left,
+          y = divPixel.y - containerPixel.y - top,
+
+          // create new svg container
+          svg = overlay.getSVG().cloneNode(true),
+          xml = document.implementation.createDocument(),
+          div = document.createElement('div'),
+          wrapper = xml.createElement("svg"),
+
+          // get map dimension
+          mapDiv = map.getDiv(),
+          width = mapDiv.clientWidth,
+          height = mapDiv.clientHeight,
+
+          // set svg clipping
+          viewBox = [x, y, width, height].join(" ");
+
+        wrapper.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+        wrapper.setAttribute("width", width);
+        wrapper.setAttribute("height", height);
+        wrapper.setAttribute("viewBox", viewBox);
+
+        wrapper.appendChild(svg);
+        div.appendChild(wrapper);
+
+        var DOMURL = self.URL || self.webkitURL || self;
+
+        var blob = new Blob([div.innerHTML], {
+          type: "image/svg+xml;charset=utf-8"
+        });
+
+        var url = DOMURL.createObjectURL(blob);
+        
+        img.src = url;
+      }
+
+ 
       
     </script>
   </body>
