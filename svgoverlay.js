@@ -37,10 +37,10 @@ SVGOverlay.prototype.setContent = function(content){
   this.div_.innerHTML = content;
 
   this.svg_ = this.div_.getElementsByTagName("svg")[0];
-  this.svg_.setAttribute("width", "100%");
-  this.svg_.setAttribute("height", "100%");
 
   this.content_ = content;
+
+  this.draw();
 };
 
 // Return the assigned SVG string.
@@ -60,16 +60,21 @@ SVGOverlay.prototype.getSVG = function(){
 
 // Internal method. Called when the layer needs an update.
 SVGOverlay.prototype.draw = function() {
-  var projection = this.getProjection(),
-    center = projection.fromLatLngToDivPixel(this.center_),
+
+  var projection = this.getProjection();
+
+  if (!projection || !this.svg_){ return; }
+
+  var center = projection.fromLatLngToDivPixel(this.center_),
     width = projection.getWorldWidth(),
     offset = width / 2,
     style = this.div_.style;
 
+  this.svg_.setAttribute("width", width);
+  this.svg_.setAttribute("height", width);
+
   style.left = (center.x - offset) + 'px';
   style.top = (center.y - offset) + 'px';
-  style.width = width + 'px';
-  style.height = width + 'px';
 };
 
 // Internal method. Triggered when `setMap` was called with `null.
