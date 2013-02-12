@@ -13,31 +13,11 @@
         bottom: 0;
       }
 
-      svg path {
-        stroke-width: 1;
-        opacity: 0.5;
-        stroke-opacity: 0.2;
-        vector-effect: non-scaling-stroke;
-      }
-
-      svg path[data-income-grp="1. High income: OECD"] {
-        fill: #F00;
-      }
-
-      svg path[data-income-grp="2. High income: nonOECD"] {
-        fill: #F90;
-      }
-
-      svg path[data-income-grp="3. Upper middle income"] {
-        fill: #FF0;
-      }
-
-      svg path[data-income-grp="4. Lower middle income"] {
-        fill: #0CF;
-      }
-
-      svg path[data-income-grp="5. Low income"] {
-        fill: #00F;
+      #canvas {
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        background-color: rgba(0,0,0,0.5);
       }
 
 
@@ -45,18 +25,19 @@
   </head>
   <body>
     <div id="map_canvas"></div>
+    <img id="canvas" />
     <script src="http://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;sensor=false"></script>
     <script src="svgoverlay.js"></script>
     <script>
 
       var map = new google.maps.Map(document.getElementById('map_canvas'), {
         zoom: 2,
-        center: new google.maps.LatLng(20, 0),
+        center: new google.maps.LatLng(10, 10),
         mapTypeId: google.maps.MapTypeId.ROADMAP
       });
 
       var xmlhttp = new XMLHttpRequest();
-      xmlhttp.open("GET", "example.svg", false);
+      xmlhttp.open("GET", "world.svg", false);
       xmlhttp.send();
       
 
@@ -64,6 +45,128 @@
         content: xmlhttp.responseText,
         map: map 
       });
+
+      var svg = overlay.getSVG();
+
+      svg.setAttribute("opacity", 0.5);
+
+
+      function paint(){
+
+        var rule, color, elems, i,
+          colors = {
+            "1. High income: OECD": "#F00",
+            "2. High income: nonOECD": "#F90",
+            "3. Upper middle income": "#FF0",
+            "4. Lower middle income": "#0CF",
+            "5. Low income": "#00F"          
+          };
+
+        for (rule in colors){
+          elems = svg.querySelectorAll('path[data-income-grp="' + rule + '"]');
+          color = colors[rule];
+
+          for (i = 0; i < elems.length; i++){
+            elems[i].setAttribute("fill", color);
+          }
+        }
+
+      }
+
+      var marker = new google.maps.Marker({
+        position: new google.maps.LatLng(53.538675, 9.963226),
+        map: map
+      });
+
+      var icon = "M1.7317647058823529 0.7529411764705882c0.12470588235294117 0 0.23117647058823526 -0.044117647058823525 0.31941176470588234 -0.1323529411764706s0.1323529411764706 -0.19470588235294117 0.1323529411764706 -0.31941176470588234s-0.044117647058823525 -0.23117647058823526 -0.1323529411764706 -0.31941176470588234s-0.19470588235294117 -0.1323529411764706 -0.31941176470588234 -0.1323529411764706h-1.3552941176470588c-0.02039176470588235 0 -0.03803882352941176 0.007450599999999999 -0.05294117647058823 0.022352941176470586s-0.022352941176470586 0.03254941176470588 -0.022352941176470586 0.05294117647058823v0.8658823529411764c0 0.07215647058823528 0.025882352941176467 0.1341176470588235 0.0776470588235294 0.18588235294117644s0.11372588235294116 0.0776470588235294 0.18588235294117644 0.0776470588235294h0.828235294117647c0.07215647058823528 0 0.1341176470588235 -0.025882352941176467 0.18588235294117644 -0.0776470588235294 s0.0776470588235294 -0.11372588235294116 0.0776470588235294 -0.18588235294117644v-0.03764705882352941h0.07529411764705882v0zM0 1.204705882352941c0 0.08313764705882352 0.02941176470588235 0.15411764705882353 0.08823529411764705 0.21294117647058822s0.1298035294117647 0.08823529411764705 0.21294117647058822 0.08823529411764705h1.5058823529411764c0.08313764705882352 0 0.15411764705882353 -0.02941176470588235 0.21294117647058822 -0.08823529411764705s0.08823529411764705 -0.1298035294117647 0.08823529411764705 -0.21294117647058822h-2.1082352941176468v0zM1.7317647058823529 0.07529411764705882c0.06274470588235294 0 0.11607764705882352 0.02196341176470588 0.15999882352941175 0.06588470588235294s0.06588235294117646 0.09725411764705881 0.06588235294117646 0.15999882352941175s-0.021961176470588234 0.11607764705882352 -0.06588235294117646 0.15999882352941175s-0.09725411764705881 0.06588235294117646 -0.15999882352941175 0.06588235294117646 h-0.07529411764705882v-0.4517647058823529h0.07529411764705882v0z";
+
+      marker.setIcon({
+        anchor: new google.maps.Point(0.85, 0.85),
+        path: icon,
+        fillColor: "#FF0",
+        fillOpacity: 1,
+        strokeColor: "#00F",
+        strokeOpacity: 1,
+        strokeWeight: 1,
+        scale: 10
+      });
+
+      paint();
+
+      var img = document.getElementById("canvas");
+
+      function draw(){
+
+        var center = new google.maps.LatLng(0,0),
+          // compute map offset
+          projection = overlay.getProjection(),
+          divPixel = projection.fromLatLngToDivPixel(center),
+          containerPixel = projection.fromLatLngToContainerPixel(center),
+
+          // compute container offset.
+          styles = overlay.getContainer().style,
+          left = parseInt(styles.left, 10),
+          top = parseInt(styles.top, 10),
+
+          x = divPixel.x - containerPixel.x - left,
+          y = divPixel.y - containerPixel.y - top,
+
+          // create new svg container
+          svg = overlay.getSVG().cloneNode(true),
+          xml = document.implementation.createDocument(),
+          div = document.createElement('div'),
+          wrapper = xml.createElement("svg"),
+
+          // get map dimension
+          mapDiv = map.getDiv(),
+          width = mapDiv.clientWidth,
+          height = mapDiv.clientHeight,
+
+          // set svg clipping
+          viewBox = [x, y, width, height].join(" "),
+
+          DOMURL = self.URL || self.webkitURL || self,
+          blob, url;
+
+
+        wrapper.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+        wrapper.setAttribute("width", width);
+        wrapper.setAttribute("height", height);
+        wrapper.setAttribute("viewBox", viewBox);
+
+        wrapper.appendChild(svg);
+        div.appendChild(wrapper);
+
+        var icon = marker.getIcon(),
+          path = xml.createElement("path"),
+          point = projection.fromLatLngToDivPixel(marker.getPosition());
+
+        point.x -= icon.scale * icon.anchor.x + left;
+        point.y -= icon.scale * icon.anchor.y + top;
+
+        path.setAttribute("d", icon.path);
+        path.setAttribute("transform", "translate(" + point.x + "," + point.y + ") scale(" + icon.scale + ")");
+        path.setAttribute("fill", icon.fillColor);
+        path.setAttribute("stroke", icon.strokeColor);
+        path.setAttribute("fill-opacity", icon.fillOpacity);
+        path.setAttribute("stroke-opacity", icon.strokeOpacity);
+        path.setAttribute("stroke-width", icon.strokeWeight);
+        path.setAttribute("vector-effect", "non-scaling-stroke");
+
+        wrapper.appendChild(path);
+
+
+        blob = new Blob([div.innerHTML], {
+          type: "image/svg+xml;charset=utf-8"
+        });
+
+        url = DOMURL.createObjectURL(blob);
+        console.log(url);
+        
+        img.src = url;
+      }
+
+ 
       
     </script>
   </body>
