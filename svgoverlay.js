@@ -7,7 +7,6 @@
  */
 
 function SVGOverlay(options) {
-
   options = options || {};
 
   this.div_ = document.createElement('div');
