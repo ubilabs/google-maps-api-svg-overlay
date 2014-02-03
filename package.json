@@ -1,0 +1,43 @@
+{
+  "name": "google-maps-api-svg-overlay",
+  "version": "0.1.0",
+  "description": "Display data in an SVG overlay on a Google Map.",
+  "homepage": "https://github.com/ubilabs/google-maps-api-svg-overlay",
+  "bugs": "https://github.com/ubilabs/google-maps-api-svg-overlay/issues",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ubilabs/google-maps-api-svg-overlay"
+  },
+  "keywords": [
+    "Google Maps Api",
+    "SVG Overlay"
+  ],
+  "author": {
+    "name": "Martin Kleppe",
+    "email": "kleppe@ubilabs.net"
+  },
+  "contributors": [
+    {
+      "name": "Robert Katzki",
+      "email": "robert@katzki.de",
+      "url": "http://katzki.de"
+    }
+  ],
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-uglify": "~0.3.2",
+    "grunt-contrib-jshint": "~0.8.0",
+    "grunt-mocha": "~0.4.10",
+    "load-grunt-tasks": "~0.2.1",
+    "time-grunt": "~0.2.8",
+    "jshint-stylish": "~0.1.5",
+    "grunt-contrib-copy": "~0.5.0",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-compress": "~0.6.0"
+  }
+}
