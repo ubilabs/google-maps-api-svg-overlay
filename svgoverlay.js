@@ -15,11 +15,11 @@ function SVGOverlay(options) {
 
   this.center_ = new google.maps.LatLng(0, 0);
 
-  if (options.map){
+  if (options.map) {
     this.setMap(options.map);
   }
 
-  if (options.content){
+  if (options.content) {
     this.setContent(options.content);
   }
 }
@@ -32,11 +32,10 @@ SVGOverlay.prototype.onAdd = function() {
 };
 
 // Set the new SVG content to display on a map.
-SVGOverlay.prototype.setContent = function(content){
-
+SVGOverlay.prototype.setContent = function(content) {
   this.div_.innerHTML = content;
 
-  this.svg_ = this.div_.getElementsByTagName("svg")[0];
+  this.svg_ = this.div_.getElementsByTagName('svg')[0];
 
   this.content_ = content;
 
@@ -44,48 +43,50 @@ SVGOverlay.prototype.setContent = function(content){
 };
 
 // Return the assigned SVG string.
-SVGOverlay.prototype.getContent = function(){
+SVGOverlay.prototype.getContent = function() {
   return this.content_;
 };
 
 // Return the surrounding DOM container.
-SVGOverlay.prototype.getContainer = function(){
+SVGOverlay.prototype.getContainer = function() {
   return this.div_;
 };
 
 // Return the SVG element.
-SVGOverlay.prototype.getSVG = function(){
+SVGOverlay.prototype.getSVG = function() {
   return this.svg_;
 };
 
 // Internal method. Called when the layer needs an update.
 SVGOverlay.prototype.draw = function() {
+  var projection = this.getProjection(),
+    style, center, width, offset, left, top, factor;
 
-  var projection = this.getProjection();
+  if (!projection || !this.svg_) {
+    return;
+  }
 
-  if (!projection || !this.svg_){ return; }
-
-  var style = this.div_.style,
+  style = this.div_.style;
 
     // compute layer offset
-    center = projection.fromLatLngToDivPixel(this.center_),
-    width = Math.round(projection.getWorldWidth()),
-    offset = width / 2,
-    
-    left = Math.round(center.x) - offset,
-    top = Math.round(center.y) - offset,
+  center = projection.fromLatLngToDivPixel(this.center_);
+  width = Math.round(projection.getWorldWidth());
+  offset = width / 2;
 
-    // compute offset for small zoom levels
-    factor = Math.max(1024 / width, 1) - 1;
+  left = Math.round(center.x) - offset;
+  top = Math.round(center.y) - offset;
+
+  // compute offset for small zoom levels
+  factor = Math.max(1024 / width, 1) - 1;
 
   // scale svg to world bounds
-  this.svg_.setAttribute("width", width);
-  this.svg_.setAttribute("height", width);
+  this.svg_.setAttribute('width', width);
+  this.svg_.setAttribute('height', width);
 
   // apply offset
   style.left = left + 'px';
   style.top = top + 'px';
-  style.marginLeft = (-factor * offset) + "px";
+  style.marginLeft = (-factor * offset) + 'px';
 };
 
 // Internal method. Triggered when `setMap` was called with `null.

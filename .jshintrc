@@ -6,7 +6,7 @@
     "maxerr"        : 50,       // {int} Maximum error before stopping
 
     // Custom Globals
-    "predef"        : ["$", "_", "app"],       // additional predefined global variables
+    "predef"        : ["$", "_", "google"],       // additional predefined global variables
 
     // Enforcing
     "bitwise"       : false,     // true: Prohibit bitwise operators (&, |, ^, etc.)
