@@ -41,12 +41,12 @@
       xmlhttp.send();
 
 
-      var overlay = new SVGOverlay({
+      var overlay = new SvgOverlay({
         content: xmlhttp.responseText,
         map: map
       });
 
-      var svg = overlay.getSVG();
+      var svg = overlay.getSvg();
 
       svg.setAttribute('opacity', 0.5);
 
@@ -112,7 +112,7 @@
           y = divPixel.y - containerPixel.y - top,
 
           // create new svg container
-          svg = overlay.getSVG().cloneNode(true),
+          svg = overlay.getSvg().cloneNode(true),
           xml = document.implementation.createDocument(),
           div = document.createElement('div'),
           wrapper = xml.createElement('svg'),
