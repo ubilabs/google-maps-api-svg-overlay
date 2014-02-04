@@ -1,0 +1,27 @@
+{
+  "name": "google-maps-api-svg-overlay",
+  "version": "0.1.0",
+  "homepage": "https://github.com/ubilabs/google-maps-api-svg-overlay",
+  "authors": [
+    "Martin Kleppe <kleppe@ubilabs.net>"
+  ],
+  "description": "Display data in an SVG overlay on a Google Map.",
+  "main": "dist/svgoverlay.min.js",
+  "keywords": [
+    "SVG overlay",
+    "SVG",
+    "Google Maps API",
+    "Google Maps"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/components",
+    "Gruntfile.js",
+    "lib",
+    "test",
+    "tests"
+  ]
+}
