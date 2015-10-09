@@ -4,6 +4,7 @@
   "description": "Display data in an SVG overlay on a Google Map.",
   "homepage": "https://github.com/ubilabs/google-maps-api-svg-overlay",
   "bugs": "https://github.com/ubilabs/google-maps-api-svg-overlay/issues",
+  "main": "lib/svgoverlay.js",
   "scripts": {
     "test": "grunt test"
   },
