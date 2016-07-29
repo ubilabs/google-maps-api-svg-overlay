@@ -1,6 +1,6 @@
 {
   "name": "google-maps-api-svg-overlay",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Display data in an SVG overlay on a Google Map.",
   "homepage": "https://github.com/ubilabs/google-maps-api-svg-overlay",
   "bugs": "https://github.com/ubilabs/google-maps-api-svg-overlay/issues",

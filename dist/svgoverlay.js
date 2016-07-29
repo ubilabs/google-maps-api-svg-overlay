@@ -72,7 +72,7 @@ SvgOverlay.prototype.getSvg = function() {
  */
 SvgOverlay.prototype.draw = function() {
   var projection = this.getProjection(),
-    style, center, width, offset, left, top, factor;
+    style, center, width, offset, left, top;
 
   if (!projection || !this.svg_) {
     return;
@@ -88,9 +88,6 @@ SvgOverlay.prototype.draw = function() {
   left = Math.round(center.x) - offset;
   top = Math.round(center.y) - offset;
 
-  // compute offset for small zoom levels
-  factor = Math.max(1024 / width, 1) - 1;
-
   // scale svg to world bounds
   this.svg_.setAttribute('width', width);
   this.svg_.setAttribute('height', width);
@@ -98,7 +95,6 @@ SvgOverlay.prototype.draw = function() {
   // apply offset
   style.left = left + 'px';
   style.top = top + 'px';
-  style.marginLeft = (-factor * offset) + 'px';
 };
 
 /**
@@ -107,3 +103,10 @@ SvgOverlay.prototype.draw = function() {
 SvgOverlay.prototype.onRemove = function() {
   this.container_.parentNode.removeChild(this.container_);
 };
+
+/**
+ * Make module compatible to module loaders
+ */
+if (typeof module == 'object') {
+  module.exports = SvgOverlay;
+}
